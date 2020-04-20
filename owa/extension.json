@@ -1,0 +1,41 @@
+{
+  "name": "Open Web Analytics for MediaWiki",
+  "author": [
+    "Peter Adams"
+  ],
+  "url": "http://www.openwebanalytics.com",
+  "description": "Open Web Analytics for MedaWiki",
+  "version": "1.0",
+  "license-name": "GPL-2.0-or-later",
+  "manifest_version": 1,
+  "AutoloadClasses": {
+    "SpecialOwa": "SpecialOwa.php",
+    "OpenWebAnalyticsInstance": "includes/OpenWebAnalyticsInstance.php",
+    "OpenWebAnalyticsHooks": "includes/Hooks/OpenWebAnalyticsHooks.php",
+    "OpenWebAnalyticsAction": "includes/Actions/OpenWebAnalyticsAction.php",
+    "owa_mw": "instance/owa_mw.php"
+  },
+  "Actions": {
+    "OwaAction": "OpenWebAnalyticsAction"
+  },
+  "SpecialPages": {
+    "SpecialOwa": "SpecialOwa"
+  },
+  "MessagesDirs": {
+    "Owa": [
+      "i18n"
+    ]
+  },
+  "Hooks": {
+    "ArticlePageDataAfter": "OpenWebAnalyticsHooks::onArticlePageDataAfter",
+    "SpecialPageExecuteAfterPage": "OpenWebAnalyticsHooks::onSpecialPageExecuteAfterPage",
+    "CategoryPageView": "OpenWebAnalyticsHooks::onCategoryPageView",
+    "BeforePageDisplay": "OpenWebAnalyticsHooks::onBeforePageDisplay",
+    "ArticleInsertComplete": "OpenWebAnalyticsHooks::onArticleInsertComplete",
+    "ArticleSaveComplete": "OpenWebAnalyticsHooks::onArticleSaveComplete",
+    "ArticleDeleteComplete": "OpenWebAnalyticsHooks::onArticleDeleteComplete",
+    "AddNewAccount": "OpenWebAnalyticsHooks::onAddNewAccount",
+    "UploadComplete": "OpenWebAnalyticsHooks::onUploadComplete",
+    "UserLoginComplete": "OpenWebAnalyticsHooks::onUserLoginComplete"
+  }
+}
