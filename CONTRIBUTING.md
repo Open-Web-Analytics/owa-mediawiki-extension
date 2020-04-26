@@ -8,7 +8,7 @@ Most of the "code" on this repository of the project is eithe PHP, JavaScript or
 
 ## Submitting changes
 
-Please send a [GitHub Pull Request to Open-Web-Analytics](https://github.com/padams/Open-Web-Analytics/pull/new/master) with a 
+Please send a [GitHub Pull Request to owa-mediawiki-extension](https://github.com/Open-Web-Analytics/owa-mediawiki-extension/pull/new/master) with a 
 clear list of what you've done (read more about [pull requests](http://help.github.com/pull-requests/)). 
 When you send a pull request, we will love you forever if you include comments. 
 Please follow our coding conventions (below) and make sure all of your commits are atomic (one feature per commit).

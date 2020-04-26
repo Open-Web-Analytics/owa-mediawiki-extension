@@ -7,8 +7,8 @@ labels: Installation
 
 **Before you open an issue:**
 
-- [ ] I followed the [installation](https://github.com/Open-Web-Analytics/Open-Web-Analytics/wiki/Installation) or [update](https://github.com/Open-Web-Analytics/Open-Web-Analytics/wiki/Updating) guide
-- [ ] [I read the troubleshooting guide in the wiki](https://github.com/Open-Web-Analytics/Open-Web-Analytics/wiki/Troubleshooting)
+- [ ] I followed the [installation](https://github.com/Open-Web-Analytics/owa-mediawiki-extension/wiki/Installation) or [update](https://github.com/Open-Web-Analytics/owa-mediawiki-extension/wiki/Updating) guide
+- [ ] [I read the troubleshooting guide in the wiki](https://github.com/Open-Web-Analytics/owa-mediawiki-extension/wiki/Troubleshooting)
 
 **Affected Version(s)**: x.y.z
 
@@ -17,14 +17,6 @@ labels: Installation
 **Webserver**: Apache/Nginx
 
 **Browser**: Chrome 80.x.x
-
-**Installation Type**
-
-<!-- Please write the version behind your installation type if you are using an plugin -->
-
-- [ ] Wordpress x.y.z
-- [ ] Mediawiki x.y.z
-- [ ] Standalone
 
 **Description**  
 <!-- A clear and concise description of the problem. -->
