@@ -1,0 +1,75 @@
+{
+  "name": "Open Web Analytics for MediaWiki",
+  "author": [
+    "Peter Adams"
+  ],
+  "url": "http://www.openwebanalytics.com",
+  "description": "Open Web Analytics for MedaWiki",
+  "version": "1.0",
+  "license-name": "GPL-2.0-or-later",
+  "type": "specialpage",
+  "requires": {
+    "MediaWiki": ">= 1.33.0"
+  },
+  "ExtensionMessagesFiles": {
+    "owaAlias": "owa.i18n.alias.php"
+  },
+  "MessagesDirs": {
+    "owa": [
+      "i18n"
+    ]
+  },
+  "Hooks": {
+    "ArticlePageDataAfter": [
+      "OpenWebAnalyticsHooks::onArticlePageDataAfter"
+    ],
+    "SpecialPageExecuteAfterPage": [
+      "OpenWebAnalyticsHooks::onSpecialPageAfterExecute"
+    ],
+    "CategoryPageView": [
+      "OpenWebAnalyticsHooks::onCategoryPageView"
+    ],
+    "BeforePageDisplay": [
+      "OpenWebAnalyticsHooks::onBeforePageDisplay"
+    ],
+    "PageContentInsertComplete": [
+      "OpenWebAnalyticsHooks::onPageContentInsertComplete"
+    ],
+    "PageContentSaveComplete": [
+      "OpenWebAnalyticsHooks::onPageContentSaveComplete"
+    ],
+    "ArticleDeleteComplete": [
+      "OpenWebAnalyticsHooks::onArticleDeleteComplete"
+    ],
+    "LocalUserCreated": [
+      "OpenWebAnalyticsHooks::onLocalUserCreated"
+    ],
+    "UploadComplete": [
+      "OpenWebAnalyticsHooks::onUploadComplete"
+    ],
+    "UserLoginComplete": [
+      "OpenWebAnalyticsHooks::onUserLoginComplete"
+    ]
+  },
+  "GroupPermissions": {
+    "bureaucrat": {
+      "owa-view": true
+    }
+  },
+  "AvailableRights": [
+    "owa-view"
+  ],
+  "SpecialPages": {
+    "Owa": "SpecialOwa"
+  },
+  "AutoloadClasses": {
+    "SpecialOwa": "includes/SpecialOwa.php",
+    "OpenWebAnalyticsInstance": "includes/OpenWebAnalyticsInstance.php",
+    "OpenWebAnalyticsHooks": "includes/Hooks/OpenWebAnalyticsHooks.php",
+    "OpenWebAnalyticsAction": "includes/Actions/OpenWebAnalyticsAction.php",
+  },
+  "Actions": {
+    "OpenWebAnalyticsAction": "OpenWebAnalyticsAction"
+  },
+  "manifest_version": 1
+}

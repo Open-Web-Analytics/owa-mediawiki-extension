@@ -28,14 +28,14 @@ class OpenWebAnalyticsHooks
      * @var string[]
      */
     private static $_roleLookup = [
-        '*'                 => 'everyone',
-        'user'              => 'viewer',
-        'autoconfirmed'     => 'viewer',
-        'emailconfirmed'    => 'viewer',
-        'bot'               => 'viewer',
-        'sysop'             => 'admin',
-        'bureaucrat'        => 'admin',
-        'developer'         => 'admin',
+        '*' => 'everyone',
+        'user' => 'viewer',
+        'autoconfirmed' => 'viewer',
+        'emailconfirmed' => 'viewer',
+        'bot' => 'viewer',
+        'sysop' => 'admin',
+        'bureaucrat' => 'admin',
+        'developer' => 'admin',
     ];
 
     /**
@@ -51,7 +51,8 @@ class OpenWebAnalyticsHooks
      * @param $article
      * @param $row
      */
-    public static function onArticlePageDataAfter($article, $row) {
+    public static function onArticlePageDataAfter($article, $row)
+    {
         $owa = OpenWebAnalyticsInstance::get();
         $owa->setPageTitle($article->getTitle()->getText());
         $owa->setPageType('Article');
@@ -61,7 +62,8 @@ class OpenWebAnalyticsHooks
      * @param $special
      * @param $subPage
      */
-    public static function onSpecialPageAfterExecute($special, $subPage) {
+    public static function onSpecialPageAfterExecute($special, $subPage)
+    {
         $owa = OpenWebAnalyticsInstance::get();
         $owa->setPageTitle($special->getTitle()->getText());
         $owa->setPageType('Article');
@@ -70,7 +72,8 @@ class OpenWebAnalyticsHooks
     /**
      * @param $categoryArticle
      */
-    public static function onCategoryPageView(&$categoryArticle) {
+    public static function onCategoryPageView(&$categoryArticle)
+    {
         $owa = OpenWebAnalyticsInstance::get();
         $owa->setPageTitle($categoryArticle->getTitle()->getText());
         $owa->setPageType('Category');
@@ -80,10 +83,11 @@ class OpenWebAnalyticsHooks
      * @param OutputPage $out
      * @param Skin $skin
      */
-    public static function onBeforePageDisplay(OutputPage $out, Skin $skin) {
+    public static function onBeforePageDisplay(OutputPage $out, Skin $skin)
+    {
         global $wgRequest, $wgOwaThirdPartyCookies, $wgOwaCookieDomain;
 
-        if ($wgRequest->getVal('action') === 'edit' || $wgRequest->getVal('title') === 'Special:Owa') {
+        if ($wgRequest->getVal('action') === 'edit' || $wgRequest->getVal('title') === 'Special:Open_Web_Analytics') {
             return;
         }
 
@@ -93,21 +97,21 @@ class OpenWebAnalyticsHooks
             return;
         }
 
-        $cmds  = "";
+        $cmds = "";
 
         if ($wgOwaThirdPartyCookies) {
-            $cmds .= "owa_cmds.push( ['setOption', 'thirdParty', true] );";
+            $cmds .= "owa_cmds.push(['setOption', 'thirdParty', true]);";
         }
 
         if ($wgOwaCookieDomain) {
-            $cmds .= "owa_cmds.push( ['setCookieDomain', '$wgOwaCookieDomain'] );";
+            $cmds .= "owa_cmds.push(['setCookieDomain', '$wgOwaCookieDomain']);";
         }
 
         $page_properties = $owa->getAllEventProperties($owa->pageview_event);
 
         if ($page_properties) {
             $page_properties_json = json_encode($page_properties);
-            $cmds .= "owa_cmds.push( ['setPageProperties', $page_properties_json] );";
+            $cmds .= "owa_cmds.push(['setPageProperties', $page_properties_json]);";
         }
 
         $options = ['cmds' => $cmds];
@@ -127,9 +131,29 @@ class OpenWebAnalyticsHooks
      * @param $flags
      * @param Revision $revision
      */
-    public static function onPageContentInsertComplete(&$wikiPage, User &$user, $content, $summary, $isMinor, $isWatch, $section, &$flags, Revision $revision) {
+    public static function onPageContentInsertComplete(&$wikiPage, User &$user, $content, $summary, $isMinor, $isWatch, $section, &$flags, Revision $revision)
+    {
         $label = $wikiPage->getTitle()->getText();
         self::trackAction('Article Created', $label);
+    }
+
+    /**
+     * @param $actionName
+     * @param string $label
+     * @return bool
+     */
+    private static function trackAction($actionName, $label = '')
+    {
+        $owa = OpenWebAnalyticsInstance::get();
+
+        if (!$owa->getSetting('base', 'install_complete')) {
+            return false;
+        }
+
+        $owa->trackAction('mediawiki', $actionName, $label);
+        owa_coreAPI::debug("logging action event " . $actionName);
+
+        return true;
     }
 
     /**
@@ -146,7 +170,8 @@ class OpenWebAnalyticsHooks
      * @param $originalRevId
      * @param $undidRevId
      */
-    public static function onPageContentSaveComplete($wikiPage, $user, $mainContent, $summaryText, $isMinor, $isWatch, $section, $flags, $revision, $status, $originalRevId, $undidRevId) {
+    public static function onPageContentSaveComplete($wikiPage, $user, $mainContent, $summaryText, $isMinor, $isWatch, $section, $flags, $revision, $status, $originalRevId, $undidRevId)
+    {
         if (!($flags & EDIT_UPDATE)) {
             return;
         }
@@ -164,7 +189,8 @@ class OpenWebAnalyticsHooks
      * @param LogEntry $logEntry
      * @param $archivedRevisionCount
      */
-    public static function onArticleDeleteComplete(&$article, User &$user, $reason, $id, $content, LogEntry $logEntry, $archivedRevisionCount) {
+    public static function onArticleDeleteComplete(&$article, User &$user, $reason, $id, $content, LogEntry $logEntry, $archivedRevisionCount)
+    {
         $label = $article->getTitle()->getText();
         self::trackAction('Article Deleted', $label);
     }
@@ -173,14 +199,16 @@ class OpenWebAnalyticsHooks
      * @param $user
      * @param $autocreated
      */
-    public static function onLocalUserCreated($user, $autocreated) {
+    public static function onLocalUserCreated($user, $autocreated)
+    {
         self::trackAction('User Account Added');
     }
 
     /**
      * @param $image
      */
-    public static function onUploadComplete(&$image) {
+    public static function onUploadComplete(&$image)
+    {
         $label = $image->getLocalFile()->getMimeType();
         self::trackAction('File Upload', $label);
     }
@@ -190,26 +218,9 @@ class OpenWebAnalyticsHooks
      * @param $inject_html
      * @param $direct
      */
-    public static function onUserLoginComplete(User &$user, &$inject_html, $direct) {
+    public static function onUserLoginComplete(User &$user, &$inject_html, $direct)
+    {
         self::trackAction('Login');
-    }
-
-    /**
-     * @param $actionName
-     * @param string $label
-     * @return bool
-     */
-    private static function trackAction($actionName, $label = '') {
-        $owa = OpenWebAnalyticsInstance::get();
-
-        if (!$owa->getSetting( 'base', 'install_complete')) {
-            return false;
-        }
-
-        $owa->trackAction( 'mediawiki', $actionName, $label );
-        owa_coreAPI::debug( "logging action event " . $actionName );
-
-        return true;
     }
 
     /**
@@ -230,13 +241,16 @@ class OpenWebAnalyticsHooks
         $cu->setUserData('user_id', $wgUser->getName());
         $cu->setUserData('email_address', $wgUser->getEmail());
         $cu->setUserData('real_name', $wgUser->getRealName());
-        $cu->setRole(self::lookupRole( $wgUser->getGroups()));
+        $cu->setRole(self::lookupRole($wgUser->getGroups()));
 
         // set list of allowed sites. In this case it's only this wiki.
 
-        $domains = [$wgOwaSiteId];
-        // load assigned sites list by domain
-        $cu->loadAssignedSitesByDomain($domains);
+        if (!defined('OWA_INSTALLING')) {
+            $domains = [$wgOwaSiteId];
+            // load assigned sites list by domain
+            $cu->loadAssignedSitesByDomain($domains);
+        }
+
         $cu->setInitialized();
 
         return true;
@@ -253,8 +267,8 @@ class OpenWebAnalyticsHooks
 
         foreach ($groups as $group) {
             // Role not found just continue
-            if(!in_array($group, self::$_roleLookup)) {
-               continue;
+            if (!in_array($group, array_keys(self::$_roleLookup))) {
+                continue;
             }
 
             $currentOwaRole = self::$_roleLookup[$group];
@@ -262,14 +276,14 @@ class OpenWebAnalyticsHooks
 
             // Has the current owa role less permission than the previous -> continue
             if ($currentHierarchy <= $hierarchyHelper) {
-               continue;
+                continue;
             }
 
             $owaRole = $currentOwaRole;
 
             // Hierarchy is already max, stop execution else continue the loop
             if (max(array_values(self::$_roleHierarchy)) == $currentHierarchy) {
-               break;
+                break;
             }
         }
 
